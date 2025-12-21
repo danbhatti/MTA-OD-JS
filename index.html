@@ -8486,10 +8486,10 @@
     
     for (let station of data) {
         var circleMarker = L.circleMarker([station.Latitude, station.Longitude], {
-        color: 'grey',
-        fillColor: 'grey',
-        fillOpacity: 0.55,
-        radius: 5.5
+        color: '#0039A6',
+        fillColor: '#0039A6',
+        fillOpacity: 0.7,
+        radius: 5
         }).addTo(map);
 
         circleMarker.addEventListener('click', () => {
