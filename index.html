@@ -8482,18 +8482,20 @@
     { maxZoom: 19, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
     // Initialize objects on map (with click events) and adjMatrix full of zeros
     adjMatrix = []
+    circMatrix = []
     
     for (let station of data) {
-        var circle = L.circle([station.Latitude, station.Longitude], {
+        var circleMarker = L.circleMarker([station.Latitude, station.Longitude], {
         color: 'grey',
         fillColor: 'grey',
         fillOpacity: 0.5,
-        radius: 300
+        radius: 7
         }).addTo(map);
 
-        circle.addEventListener('click', () => {
+        circleMarker.addEventListener('click', () => {
             console.log(station.stopName)
             console.log(dijkstra(station.num))
+            updateMap(dijkstra(station.num), circMatrix)
         })
 
         row = []
@@ -8501,8 +8503,8 @@
             row.push(0)
         }
         adjMatrix.push(row)
+        circMatrix.push(circleMarker)
     }
-    
     
 
 
@@ -8515,7 +8517,14 @@
         }
     }
 
-    
+    function updateMap(adjRow, circleMatrix) {
+        for (let n in adjRow){
+          circleMatrix[n].setStyle({color: getColor(adjRow[n]), fillColor: getColor(adjRow[n])});
+        }
+    }
+
+
+
     function dijkstra(sourceNode) {
         // 1. Initialize lists (Replacing np.full)
         const helperBoolList = new Array(data.length).fill(false);
@@ -8564,17 +8573,18 @@
 
     function getColor(distance){
     if (distance == 0)
-        return 'black';
+        return '#0039A6';
     else if (distance == 1)
         return 'green';
     else if (distance == 2)
         return 'yellow';
     else if (distance == 3)
-        return 'red';
-    return '#0039A6';
+        return 'orange';
+    //return '#0039A6';
+    return 'red';
     }
 
-    console.log(data[445])
+    console.log(circMatrix[0].options.color == 'blue')
 
 </script>
 
